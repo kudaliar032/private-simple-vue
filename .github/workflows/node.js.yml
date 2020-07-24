@@ -51,6 +51,7 @@ jobs:
         name: dist-10.x
     - name: Decrypt deploy key
       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
+    - run: chmod 600 deploy/deploy_key
     - name: Play ansible deploy playbook
       run: |
         ansible --version
