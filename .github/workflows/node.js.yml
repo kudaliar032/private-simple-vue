@@ -21,7 +21,7 @@ jobs:
     needs: hello-world
     strategy:
       matrix:
-        node-version: [10, 12]
+        node-version: [12]
     container: node:${{ matrix.node-version }}-alpine
     steps:
     - uses: actions/checkout@v2
@@ -46,10 +46,14 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: dist-10.x
+        name: dist-12
     - name: Decrypt deploy key
       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
     - run: chmod 600 deploy/deploy_key
+    - name: Where me
+      run: |
+        pwd
+        ls -lha
     - name: Play ansible deploy playbook
       run: |
         ansible --version
