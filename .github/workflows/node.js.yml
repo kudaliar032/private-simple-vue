@@ -41,3 +41,12 @@ jobs:
     - name: Decrypt deploy key
       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
     - run: ls -lha deploy
+    - name: Play ansible deploy playbook
+      uses: arillso/action.playbook@master
+      with:
+        playbook: deploy/aws.yml
+        inventory: deploy/hosts
+        private_key: deploy/deploy_key
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: 'false'
+        ANSIBLE_DEPRECATION_WARNINGS: 'false'
