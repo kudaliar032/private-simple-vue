@@ -40,16 +40,11 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: build
+    container: dotlabs/ansible
     env:
       DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
     steps:
     - uses: actions/checkout@v2
-    - name: Install python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install ansible
-      run: pip install ansible
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
