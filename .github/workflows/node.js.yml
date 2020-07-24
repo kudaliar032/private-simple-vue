@@ -25,6 +25,11 @@ jobs:
     container: node:${{ matrix.node-version }}-alpine
     steps:
     - uses: actions/checkout@v2
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules/
+        key: ${{ runner.os }}-build-node-${{ matrix.node-version }}
     - run: |
         npm ci
         npm run lint --if-present
@@ -47,6 +52,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: dist-12
+        path: dist/
     - name: Decrypt deploy key
       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
     - run: chmod 600 deploy/deploy_key
