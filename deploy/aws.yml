@@ -7,6 +7,6 @@
   tasks:
     - name: deploy new build to server
       synchronize:
-        src: /mnt/hdd-2/DOT/rnd/github-actions/nodejs/private-simple-vue/dist
+        src: ../dist
         dest: /srv/www/htdocs/simple-vue
         dirs: yes
