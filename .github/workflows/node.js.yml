@@ -13,7 +13,8 @@ jobs:
     steps:
     - name: hello-world-docker-action
       uses: kudaliar032/hello-world-docker-action@v1
-      who-to-greet: 'Aditya Rahman'
+      with:
+        who-to-greet: 'Aditya Rahman'
 
   build:
     runs-on: self-hosted
