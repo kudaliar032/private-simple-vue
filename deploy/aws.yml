@@ -1,0 +1,12 @@
+---
+- name: deploy to aws server
+  hosts: aws
+  gather_facts: no
+  become: true
+  remote_user: ec2-user
+  tasks:
+    - name: deploy new build to server
+      synchronize:
+        src: /mnt/hdd-2/DOT/rnd/github-actions/nodejs/private-simple-vue/dist
+        dest: /srv/www/htdocs/simple-vue
+        dirs: yes

@@ -9,13 +9,10 @@ on:
 
 jobs:
   build:
-
     runs-on: self-hosted
-
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
-
+        node-version: [10.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -25,3 +22,11 @@ jobs:
     - run: npm ci
     - run: npm run lint --if-present
     - run: npm run build --if-present
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Decrypt deploy key
+      run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
+    - run: ls -lha deploy
