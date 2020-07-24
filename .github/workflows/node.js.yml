@@ -43,19 +43,20 @@ jobs:
       DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
     steps:
     - uses: actions/checkout@v2
+    - name: Install python
+      uses: actions/setup-python@v2
+    - name: Install ansible
+      run: pip install ansible
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
         name: dist-10.x
     - name: Decrypt deploy key
       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
-    - run: ls -lha deploy
     - name: Play ansible deploy playbook
-      uses: arillso/action.playbook@master
-      with:
-        playbook: deploy/aws.yml
-        inventory: deploy/hosts
-        private_key: deploy/deploy_key
+      run: |
+        ansible --version
+        ansible-playbook --inventory deploy/hosts --private-key deploy/deploy_key deploy/aws.yml
       env:
         ANSIBLE_HOST_KEY_CHECKING: 'false'
         ANSIBLE_DEPRECATION_WARNINGS: 'false'
