@@ -40,7 +40,7 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: build
-    container: dotlabs/ansible
+    container: kudaliar032/ansible:gpg
     env:
       DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
     steps:
