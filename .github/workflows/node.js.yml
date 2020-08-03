@@ -21,7 +21,7 @@ jobs:
     needs: hello-world
     strategy:
       matrix:
-        node-version: [12]
+        node-version: [8.x, 10.x, 12.x, 14.x]
     container: node:${{ matrix.node-version }}-alpine
     steps:
     - uses: actions/checkout@v2
@@ -40,30 +40,30 @@ jobs:
         name: dist-${{ matrix.node-version }}
         path: dist/
 
-  deploy:
-    runs-on: self-hosted
-    needs: build
-    container: kudaliar032/ansible:gpg
-    env:
-      DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: dist-12
-        path: dist/
-    - name: Decrypt deploy key
-      run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
-    - run: chmod 600 deploy/deploy_key
-    - name: Where me
-      run: |
-        pwd
-        ls -lha
-    - name: Play ansible deploy playbook
-      run: |
-        ansible --version
-        ansible-playbook --inventory deploy/hosts --private-key deploy/deploy_key deploy/aws.yml
-      env:
-        ANSIBLE_HOST_KEY_CHECKING: 'false'
-        ANSIBLE_DEPRECATION_WARNINGS: 'false'
+#   deploy:
+#     runs-on: self-hosted
+#     needs: build
+#     container: kudaliar032/ansible:gpg
+#     env:
+#       DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Download artifact
+#       uses: actions/download-artifact@v2
+#       with:
+#         name: dist-12
+#         path: dist/
+#     - name: Decrypt deploy key
+#       run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
+#     - run: chmod 600 deploy/deploy_key
+#     - name: Where me
+#       run: |
+#         pwd
+#         ls -lha
+#     - name: Play ansible deploy playbook
+#       run: |
+#         ansible --version
+#         ansible-playbook --inventory deploy/hosts --private-key deploy/deploy_key deploy/aws.yml
+#       env:
+#         ANSIBLE_HOST_KEY_CHECKING: 'false'
+#         ANSIBLE_DEPRECATION_WARNINGS: 'false'
